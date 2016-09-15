@@ -1,0 +1,82 @@
+---
+- name: 'Install a few pre-requisite packages'
+  apt:
+    name: "{{ item }}"
+    state: 'installed'
+  with_items:
+    - 'python-pip'
+    - 'python-lxml'
+    - 'python-dev'
+    - 'libssl-dev'
+    - 'libffi-dev'
+
+- name: 'Install pyopenssl'
+  pip:
+    name: 'pyopenssl'
+    state: 'latest'
+    umask: '0022'
+
+- name: 'Create the user that the couchpotato daemon will run as'
+  user:
+    name: "{{ couchpotato_daemon_user }}"
+
+- name: 'Create the couchpotato src directory'
+  file:
+    path: "{{ couchpotato_app_src_directory }}"
+    state: 'directory'
+    owner: "{{ couchpotato_daemon_user }}"
+    mode: '0755'
+
+- name: 'Create the couchpotato data directory'
+  file:
+    path: "{{ couchpotato_app_data_directory }}"
+    state: 'directory'
+    owner: "{{ couchpotato_daemon_user }}"
+    mode: '0755'
+
+- name: 'Create the couchpotato data directories'
+  file:
+    path: "{{ couchpotato_app_data_directory }}/{{ item }}"
+    state: 'directory'
+    owner: "{{ couchpotato_daemon_user }}"
+    mode: '0755'
+  with_items:
+    - 'config'
+    - 'downloads'
+    - 'incomplete-downloads'
+
+- name: 'Git clone couchpotato to the src directory'
+  git:
+    clone: 'yes'
+    dest: "{{ couchpotato_app_src_directory }}"
+    force: 'yes'
+    repo: 'https://github.com/CouchPotato/CouchPotatoServer.git'
+    version: 'build/3.0.1'  # Corresponding release tag
+  notify: 'restart-ansible-role-couchpotato'
+
+- name: 'Set the contents of the /etc/default/couchpotato file appropriately'
+  template:
+    src: 'couchpotato.j2'
+    dest: '/etc/default/couchpotato'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify: 'restart-ansible-role-couchpotato'
+
+- name: 'Create the couchpotato init script'
+  copy:
+    src: 'init.ubuntu'
+    dest: '/etc/init.d/couchpotato'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+    force: 'yes'
+  notify: 'restart-ansible-role-couchpotato'
+
+- meta: flush_handlers
+
+- name: 'Start the couchpotato daemon'
+  service:
+    name: 'couchpotato'
+    state: 'started'
+    enabled: 'yes'

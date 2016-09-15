@@ -1,0 +1,9 @@
+---
+# Application config
+couchpotato_app_src_directory: '/opt/couchpotato_src'
+couchpotato_app_data_directory: '/opt/couchpotato_data'
+couchpotato_app_pid_file: '/tmp/couchpotato.pid'
+
+# Daemon config
+couchpotato_daemon_user: 'couchdaemon'
+couchpotato_daemon_extra_args: ''
