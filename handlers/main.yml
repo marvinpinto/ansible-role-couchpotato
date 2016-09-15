@@ -1,0 +1,5 @@
+---
+- name: 'restart-ansible-role-couchpotato'
+  service:
+    name: 'couchpotato'
+    state: 'restarted'
