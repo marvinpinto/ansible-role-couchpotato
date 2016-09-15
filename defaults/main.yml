@@ -3,6 +3,7 @@
 couchpotato_app_src_directory: '/opt/couchpotato_src'
 couchpotato_app_data_directory: '/opt/couchpotato_data'
 couchpotato_app_pid_file: '/tmp/couchpotato.pid'
+couchpotato_app_version: 'build/3.0.1'  # Release tag on https://github.com/CouchPotato/CouchPotatoServer
 
 # Daemon config
 couchpotato_daemon_user: 'couchdaemon'

@@ -51,7 +51,7 @@
     dest: "{{ couchpotato_app_src_directory }}"
     force: 'yes'
     repo: 'https://github.com/CouchPotato/CouchPotatoServer.git'
-    version: 'build/3.0.1'  # Corresponding release tag
+    version: "{{ couchpotato_app_version }}"
   notify: 'restart-ansible-role-couchpotato'
 
 - name: 'Set the contents of the /etc/default/couchpotato file appropriately'
