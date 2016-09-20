@@ -27,24 +27,6 @@
     owner: "{{ couchpotato_daemon_user }}"
     mode: '0755'
 
-- name: 'Create the couchpotato data directory'
-  file:
-    path: "{{ couchpotato_app_data_directory }}"
-    state: 'directory'
-    owner: "{{ couchpotato_daemon_user }}"
-    mode: '0755'
-
-- name: 'Create the couchpotato data directories'
-  file:
-    path: "{{ couchpotato_app_data_directory }}/{{ item }}"
-    state: 'directory'
-    owner: "{{ couchpotato_daemon_user }}"
-    mode: '0755'
-  with_items:
-    - 'config'
-    - 'downloads'
-    - 'incomplete-downloads'
-
 - name: 'Git clone couchpotato to the src directory'
   git:
     clone: 'yes'
