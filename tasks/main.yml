@@ -5,7 +5,6 @@
     state: 'installed'
   with_items:
     - 'python-pip'
-    - 'python-lxml'
     - 'python-dev'
     - 'libssl-dev'
     - 'libffi-dev'
@@ -14,6 +13,12 @@
   pip:
     name: 'pyopenssl'
     state: 'latest'
+    umask: '0022'
+
+- name: 'Install lxml'
+  pip:
+    name: 'lxml'
+    state: 'present'
     umask: '0022'
 
 - name: 'Create the user that the couchpotato daemon will run as'
